@@ -1,70 +1,162 @@
-# Getting Started with Create React App
+# To-Do List en React con Redux
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Este es un ejemplo básico de cómo crear una aplicación To-Do List en React utilizando Redux para gestionar el estado de las tareas. A continuación, se detallan los pasos necesarios para configurar este proyecto.
 
-## Available Scripts
+## Pasos para configurar el proyecto
 
-In the project directory, you can run:
+### 1. Instalación de dependencias
 
-### `npm start`
+Asegúrate de tener Node.js y npm instalados. Luego, crea un proyecto de React con Create React App y agrega las dependencias necesarias:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+```bash
+npx create-react-app todo-list-redux
+cd todo-list-redux
+npm install redux react-redux
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+2. Estructura de carpetas
+Organiza tu proyecto de la siguiente manera:
 
-### `npm test`
+src/
+├── actions/
+│   ├── types.js
+│   ├── todoActions.js
+├── components/
+│   ├── TodoForm.js
+│   ├── TodoList.js
+├── reducers/
+│   ├── todoReducer.js
+├── store/
+│   ├── index.js
+├── App.js
+├── index.js
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+3. Definición de tipos de acciones (types.js):
+Crea un archivo types.js para definir tipos de acciones. Esto ayuda a mantener un registro de las acciones disponibles.
 
-### `npm run build`
+// actions/types.js
+export const ADD_TODO = 'ADD_TODO';
+export const REMOVE_TODO = 'REMOVE_TODO';
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+4. Acciones (todoActions.js):
+Define las acciones en todoActions.js para agregar y eliminar tareas.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+// actions/todoActions.js
+import { ADD_TODO, REMOVE_TODO } from './types';
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+// Acción para agregar una tarea
+export const addTodo = (text) => ({
+  type: ADD_TODO,
+  payload: {
+    text,
+  },
+});
 
-### `npm run eject`
+// Acción para eliminar una tarea
+export const removeTodo = (id) => ({
+  type: REMOVE_TODO,
+  payload: {
+    id,
+  },
+});
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+5. Reducer (todoReducer.js):
+Crea el reducer en todoReducer.js para gestionar el estado de las tareas y responder a las acciones.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+// reducers/todoReducer.js
+import { ADD_TODO, REMOVE_TODO } from '../actions/types';
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+const initialState = {
+  todos: [],
+};
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+const todoReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case ADD_TODO:
+      return {
+        ...state,
+        todos: [...state.todos, { id: Date.now(), text: action.payload.text }],
+      };
+    case REMOVE_TODO:
+      return {
+        ...state,
+        todos: state.todos.filter((todo) => todo.id !== action.payload.id),
+      };
+    default:
+      return state;
+  }
+};
 
-## Learn More
+export default todoReducer;
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+6. Configuración del almacenamiento (store/index.js):
+Combina el reducer y crea el almacenamiento Redux.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+// store/index.js
+import { createStore } from 'redux';
+import todoReducer from '../reducers/todoReducer';
 
-### Code Splitting
+const store = createStore(todoReducer);
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+export default store;
 
-### Analyzing the Bundle Size
+7. Componente Formulario (TodoForm.js):
+Crea el componente TodoForm.js para agregar nuevas tareas.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+// components/TodoForm.js
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { addTodo } from '../actions/todoActions';
 
-### Making a Progressive Web App
+const TodoForm = () => {
+  // ...
+};
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+export default TodoForm;
 
-### Advanced Configuration
+8. Componente Lista de Tareas (TodoList.js):
+Crea el componente TodoList.js para mostrar las tareas y permitir la eliminación.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+// components/TodoList.js
+import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { removeTodo } from '../actions/todoActions';
 
-### Deployment
+const TodoList = () => {
+  // ...
+};
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+export default TodoList;
 
-### `npm run build` fails to minify
+9. Integración en la aplicación principal (App.js):
+Conecta los componentes al almacenamiento Redux en App.js.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+// App.js
+import React from 'react';
+import './App.css';
+import TodoForm from './components/TodoForm';
+import TodoList from './components/TodoList';
+
+function App() {
+  // ...
+}
+
+export default App;
+
+10. Conexión de la aplicación principal a Redux (index.js):
+Proporciona el almacenamiento Redux a toda la aplicación en index.js.
+
+// index.js
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.css';
+import App from './App';
+import { Provider } from 'react-redux';
+import store from './store';
+
+ReactDOM.render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById('root')
+);
+
