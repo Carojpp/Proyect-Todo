@@ -11,10 +11,14 @@ Asegúrate de tener Node.js y npm instalados. Luego, crea un proyecto de React c
 ```bash
 npx create-react-app todo-list-redux
 cd todo-list-redux
-npm install redux react-redux
+npm install redux react-redux 
 
-2. Estructura de carpetas
+```
+
+### 2. Estructura de carpetas
 Organiza tu proyecto de la siguiente manera:
+
+```bash
 
 src/
 ├── actions/
@@ -30,16 +34,19 @@ src/
 ├── App.js
 ├── index.js
 
-3. Definición de tipos de acciones (types.js):
+```
+
+### 3. Definición de tipos de acciones (types.js):
 Crea un archivo types.js para definir tipos de acciones. Esto ayuda a mantener un registro de las acciones disponibles.
 
+```bash
 // actions/types.js
 export const ADD_TODO = 'ADD_TODO';
 export const REMOVE_TODO = 'REMOVE_TODO';
-
-4. Acciones (todoActions.js):
+```
+### 4. Acciones (todoActions.js):
 Define las acciones en todoActions.js para agregar y eliminar tareas.
-
+```bash
 // actions/todoActions.js
 import { ADD_TODO, REMOVE_TODO } from './types';
 
@@ -58,10 +65,11 @@ export const removeTodo = (id) => ({
     id,
   },
 });
+```
 
-5. Reducer (todoReducer.js):
+### 5. Reducer (todoReducer.js):
 Crea el reducer en todoReducer.js para gestionar el estado de las tareas y responder a las acciones.
-
+```bash
 // reducers/todoReducer.js
 import { ADD_TODO, REMOVE_TODO } from '../actions/types';
 
@@ -87,10 +95,11 @@ const todoReducer = (state = initialState, action) => {
 };
 
 export default todoReducer;
+```
 
-6. Configuración del almacenamiento (store/index.js):
+### 6. Configuración del almacenamiento (store/index.js):
 Combina el reducer y crea el almacenamiento Redux.
-
+```bash
 // store/index.js
 import { createStore } from 'redux';
 import todoReducer from '../reducers/todoReducer';
@@ -98,10 +107,12 @@ import todoReducer from '../reducers/todoReducer';
 const store = createStore(todoReducer);
 
 export default store;
+```
 
-7. Componente Formulario (TodoForm.js):
+### 7. Componente Formulario (TodoForm.js):
 Crea el componente TodoForm.js para agregar nuevas tareas.
 
+```bash
 // components/TodoForm.js
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -112,10 +123,11 @@ const TodoForm = () => {
 };
 
 export default TodoForm;
+```
 
-8. Componente Lista de Tareas (TodoList.js):
+### 8. Componente Lista de Tareas (TodoList.js):
 Crea el componente TodoList.js para mostrar las tareas y permitir la eliminación.
-
+```bash
 // components/TodoList.js
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
@@ -126,10 +138,11 @@ const TodoList = () => {
 };
 
 export default TodoList;
+```
 
-9. Integración en la aplicación principal (App.js):
+### 9. Integración en la aplicación principal (App.js):
 Conecta los componentes al almacenamiento Redux en App.js.
-
+```bash
 // App.js
 import React from 'react';
 import './App.css';
@@ -141,10 +154,11 @@ function App() {
 }
 
 export default App;
+```
 
-10. Conexión de la aplicación principal a Redux (index.js):
+### 10. Conexión de la aplicación principal a Redux (index.js):
 Proporciona el almacenamiento Redux a toda la aplicación en index.js.
-
+```bash
 // index.js
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -159,4 +173,4 @@ ReactDOM.render(
   </Provider>,
   document.getElementById('root')
 );
-
+```
